@@ -1,12 +1,12 @@
 use std::marker::PhantomData;
 
-use ggrs::{Message, PlayerType};
-use matchbox_protocol::PeerId;
-
 use crate::{
     ChannelConfig, ChannelPlurality, MessageLoopFuture, MultipleChannels, NoChannels, Packet,
     SingleChannel, WebRtcChannel, WebRtcSocket, WebRtcSocketBuilder,
 };
+use bytes::Bytes;
+use ggrs::{Message, PlayerType};
+use matchbox_protocol::PeerId;
 
 impl ChannelConfig {
     /// Creates a [`ChannelConfig`] suitable for use with GGRS.
@@ -93,7 +93,7 @@ impl<C: ChannelPlurality> WebRtcSocket<C> {
 }
 
 fn build_packet(msg: &Message) -> Packet {
-    bincode::serialize(&msg).unwrap().into_boxed_slice()
+    Bytes::from(bincode::serialize(&msg).unwrap())
 }
 
 fn deserialize_packet(message: (PeerId, Packet)) -> (PeerId, Message) {

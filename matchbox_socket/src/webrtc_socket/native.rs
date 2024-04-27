@@ -289,7 +289,6 @@ impl Messenger for NativeMessenger {
                     while let Some(message) = rx.next().await {
                         trace!("sending packet {message:?}");
                         let message = message.clone();
-                        let message = Bytes::from(message);
                         if let Err(e) = data_channel.send(&message).await {
                             error!("error sending to data channel: {e:?}")
                         }
@@ -555,7 +554,7 @@ async fn create_data_channel(
     }));
 
     channel.on_message(Box::new(move |message| {
-        let packet = (*message.data).into();
+        let packet = message.data;
         trace!("data channel message received: {packet:?}");
         if let Err(e) = from_peer_message_tx.unbounded_send((peer_id, packet)) {
             // should only happen if the socket is dropped, or we are out of memory

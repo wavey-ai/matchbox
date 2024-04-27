@@ -65,7 +65,7 @@ async fn async_main() {
                 PeerState::Connected => {
                     info!("Peer joined: {peer}");
                     let packet = "hello friend!".as_bytes().to_vec().into_boxed_slice();
-                    socket.send(packet, peer);
+                    socket.send(packet.into(), peer);
                 }
                 PeerState::Disconnected => {
                     info!("Peer left: {peer}");
@@ -85,7 +85,7 @@ async fn async_main() {
                 let peers: Vec<PeerId> = socket.connected_peers().collect();
                 for peer in peers {
                     let packet = "ping!".as_bytes().to_vec().into_boxed_slice();
-                    socket.send(packet, peer);
+                    socket.send(packet.into(), peer);
                 }
                 timeout.reset(Duration::from_millis(10));
             }
