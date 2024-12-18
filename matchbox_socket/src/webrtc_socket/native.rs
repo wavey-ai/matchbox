@@ -16,7 +16,6 @@ use async_tungstenite::{
     tungstenite::Message,
     WebSocketStream,
 };
-use bytes::Bytes;
 use futures::{
     future::{Fuse, FusedFuture},
     stream::FuturesUnordered,
