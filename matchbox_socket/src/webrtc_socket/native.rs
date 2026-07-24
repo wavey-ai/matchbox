@@ -36,6 +36,7 @@ use webrtc::{
     },
     peer_connection::{
         RTCPeerConnection, configuration::RTCConfiguration,
+        policy::ice_transport_policy::RTCIceTransportPolicy,
         sdp::session_description::RTCSessionDescription,
     },
 };
@@ -462,6 +463,11 @@ async fn create_rtc_peer_connection(
             username: ice_server_config.username.clone().unwrap_or_default(),
             credential: ice_server_config.credential.clone().unwrap_or_default(),
         }],
+        ice_transport_policy: if ice_server_config.relay_only {
+            RTCIceTransportPolicy::Relay
+        } else {
+            RTCIceTransportPolicy::All
+        },
         ..Default::default()
     };
 

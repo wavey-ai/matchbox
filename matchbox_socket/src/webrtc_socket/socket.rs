@@ -37,6 +37,8 @@ pub struct RtcIceServerConfig {
     ///
     /// See: <https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer/credential>
     pub credential: Option<String>,
+    /// Restrict ICE candidates to TURN relays.
+    pub relay_only: bool,
 }
 
 /// Configuration options for a data channel
@@ -80,6 +82,7 @@ impl Default for RtcIceServerConfig {
             ],
             username: Default::default(),
             credential: Default::default(),
+            relay_only: false,
         }
     }
 }

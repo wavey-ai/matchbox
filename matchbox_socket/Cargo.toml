@@ -70,6 +70,7 @@ web-sys = { version = "0.3.22", default-features = false, features = [
   "RtcIceCandidateInit",
   "RtcIceConnectionState",
   "RtcIceGatheringState",
+  "RtcIceTransportPolicy",
   "RtcPeerConnection",
   "RtcPeerConnectionIceEvent",
   "RtcSdpType",

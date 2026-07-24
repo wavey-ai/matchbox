@@ -21,8 +21,8 @@ use wasm_bindgen::{JsCast, JsValue, convert::FromWasmAbi, prelude::*};
 use wasm_bindgen_futures::JsFuture;
 use web_sys::{
     Event, MessageEvent, RtcConfiguration, RtcDataChannel, RtcDataChannelInit, RtcDataChannelType,
-    RtcIceCandidateInit, RtcIceGatheringState, RtcPeerConnection, RtcPeerConnectionIceEvent,
-    RtcSdpType, RtcSessionDescriptionInit,
+    RtcIceCandidateInit, RtcIceGatheringState, RtcIceTransportPolicy, RtcPeerConnection,
+    RtcPeerConnectionIceEvent, RtcSdpType, RtcSessionDescriptionInit,
 };
 use ws_stream_wasm::{WsMessage, WsMeta, WsStream};
 
@@ -422,6 +422,7 @@ fn create_rtc_peer_connection(ice_server_config: &RtcIceServerConfig) -> RtcPeer
     }
 
     let peer_config = RtcConfiguration::new();
+    let relay_only = ice_server_config.relay_only;
     let ice_server_config = IceServerConfig {
         urls: ice_server_config.urls.clone(),
         username: ice_server_config.username.clone().unwrap_or_default(),
@@ -429,6 +430,9 @@ fn create_rtc_peer_connection(ice_server_config: &RtcIceServerConfig) -> RtcPeer
     };
     let ice_server_config_list = [ice_server_config];
     peer_config.set_ice_servers(&serde_wasm_bindgen::to_value(&ice_server_config_list).unwrap());
+    if relay_only {
+        peer_config.set_ice_transport_policy(RtcIceTransportPolicy::Relay);
+    }
     let connection = RtcPeerConnection::new_with_configuration(&peer_config).unwrap();
 
     let connection_1 = connection.clone();
